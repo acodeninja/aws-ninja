@@ -1,0 +1,12 @@
+{% if tags.values() %}
+    <details>
+        <summary>Resource Tags</summary>
+
+        <dl>
+            {% for key, value in tags.items() %}
+                <dt>{{ key }}</dt>
+                <dd>{{ value }}</dd>
+            {% endfor %}
+        </dl>
+    </details>
+{% endif %}

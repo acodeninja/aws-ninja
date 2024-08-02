@@ -1,0 +1,122 @@
+<h3 data-finding="{{ service.storage_finding | to_human | lower }} - {{ service.instance_finding | to_human | lower }}">
+    <a href="{{ service.arn }}">{{ service.name }}</a>
+</h3>
+
+{% with tags=service.tags %}
+    {% include "resource_tags.html.jinja" %}
+{% endwith %}
+
+<p>This RDS database's instance class is {{ service.instance_finding | to_human | lower }} and it's
+    storage is {{ service.storage_finding | to_human | lower }}.</p>
+
+{% if service.instance_findings %}
+    <p>The following recommendations exist for the database instance:</p>
+    <ul>
+        {% for finding in service.instance_findings %}
+            <li>{{ finding | to_human }}</li>
+        {% endfor %}
+    </ul>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Attribute</th>
+            <th>Current</th>
+            {% for r in service.instance_recommendations %}
+                <th>Recommendation {{ loop.index }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Instance Class</td>
+            <td>
+                <code>{{ service.instance_current.type }}</code>
+            </td>
+            {% for r in service.instance_recommendations %}
+                <td>
+                    <code>{{ r.proposed.type }}</code>
+                </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+{% endif %}
+
+{% if service.storage_findings %}
+    <p>The following recommendations exist for the database's storage configuration:</p>
+    <ul>
+        {% for finding in service.storage_findings %}
+            <li>{{ finding | to_human }}</li>
+        {% endfor %}
+    </ul>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Attribute</th>
+            <th>Current</th>
+            {% for r in service.storage_recommendations %}
+                <th>Recommendation {{ loop.index }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Type</td>
+            <td>
+                <code>{{ service.storage_current.type }}</code>
+            </td>
+            {% for r in service.storage_recommendations %}
+                <td>
+                    <code>{{ r.proposed.type }}</code>
+                </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>Throughput</td>
+            <td>
+                <code>{{ service.storage_current.throughput }}</code>
+            </td>
+            {% for r in service.storage_recommendations %}
+                <td>
+                    <code>{{ r.proposed.throughput }}</code>
+                </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>Allocation</td>
+            <td>
+                <code>{{ service.storage_current.allocated }}</code>
+            </td>
+            {% for r in service.storage_recommendations %}
+                <td>
+                    <code>{{ r.proposed.allocated }}</code>
+                </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>Max Allocation</td>
+            <td>
+                <code>{{ service.storage_current.max_allocated }}</code>
+            </td>
+            {% for r in service.storage_recommendations %}
+                <td>
+                    <code>{{ r.proposed.max_allocated }}</code>
+                </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td><a href="https://en.wikipedia.org/wiki/IOPS">IOPS</a></td>
+            <td>
+                <code>{{ service.storage_current.iops }}</code>
+            </td>
+            {% for r in service.storage_recommendations %}
+                <td>
+                    <code>{{ r.proposed.iops }}</code>
+                </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+{% endif %}

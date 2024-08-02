@@ -1,0 +1,17 @@
+<h3>{{ recommendation.name }}</h3>
+
+<div style="flex: auto">
+    {% for pillar in recommendation.pillars %}
+        <small style="background: var(--accent-bg); padding: 4px; border-radius: 2px;">{{ pillar | to_human }}</small>
+    {% endfor %}
+</div>
+
+<small>{{ recommendation.description }}</small>
+
+<h4>Impacted Resources</h4>
+
+<ul>
+    {% for resource in recommendation.resources %}
+        <li><a href="{{ resource.arn }}">{{ resource.arn }}</a></li>
+    {% endfor %}
+</ul>

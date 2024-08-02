@@ -1,0 +1,18 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install poetry
+      - run: poetry install
+      - run: poetry build
+      - run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
+      - run: poetry publish

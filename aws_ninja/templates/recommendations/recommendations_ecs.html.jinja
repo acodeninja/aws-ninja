@@ -1,0 +1,62 @@
+<h3 data-finding="{{ service.recommendation.finding | to_human | lower }}">
+    <a href="{{ service.arn }}">{{ service.name }}</a>
+</h3>
+
+{% with tags=service.tags %}
+    {% include "resource_tags.html.jinja" %}
+{% endwith %}
+
+{% if service.recommendation.findings %}
+    <p>This ecs service seems to be {{ service.recommendation.finding | to_human | lower }} for the
+        following reasons:</p>
+    <ul>
+        {% for finding in service.recommendation.findings %}
+            <li>{{ finding | to_human }}</li>
+        {% endfor %}
+    </ul>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Attribute</th>
+            <th>Provisioned</th>
+            <th>{{ service.metrics.period }} day max</th>
+            {% for proposal in service.recommendation.proposed %}
+                <th>Recommendation {{ loop.index }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>CPU</td>
+            <td>
+                <code>{{ service.provisioned.cpu }}</code>
+            </td>
+            <td>
+                <code>{{ service.metrics.cpu }}</code>
+            </td>
+            {% for proposal in service.recommendation.proposed %}
+                <td>
+                    <code>{{ proposal.cpu }}</code>
+                </td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>Memory</td>
+            <td>
+                <code>{{ service.provisioned.memory }}</code>
+            </td>
+            <td>
+                <code>{{ service.metrics.memory }}</code>
+            </td>
+            {% for proposal in service.recommendation.proposed %}
+                <td>
+                    <code>{{ proposal.memory }}</code>
+                </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+{% else %}
+    <p>This ecs service seems to be {{ service.recommendation.finding | to_human | lower }}.</p>
+{% endif %}
