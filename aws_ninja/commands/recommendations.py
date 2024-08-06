@@ -87,7 +87,8 @@ def recommend(ctx, format):
         act_on_ecs = Path(os.getcwd(), 'acting_on_ecs.html')
         act_on_rds = Path(os.getcwd(), 'acting_on_rds.html')
 
-        environment = Environment(loader=FileSystemLoader("aws_ninja/templates/"))
+        template_path = Path(__file__).parent.parent.joinpath('templates')
+        environment = Environment(loader=FileSystemLoader(template_path.resolve()))
         environment.filters['to_human'] = recommendation_finding_to_human
         template = environment.get_template("recommendations/recommendations.html.jinja")
 
