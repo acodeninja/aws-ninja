@@ -52,9 +52,9 @@ class ECSService:
         self.recommendation = Recommendation()
         self.recommendation.resource_type = RecommendationResourceType.ECS
         self.recommendation.category = RecommendationCategory.INSTANCE
-        self.recommendation.finding = RecommendationFinding(service['finding'])
+        self.recommendation.finding = RecommendationFinding(service['finding'].lower())
         self.recommendation.findings = [
-            RecommendationFinding(c) for c in service['findingReasonCodes']
+            RecommendationFinding(c.lower()) for c in service['findingReasonCodes']
         ]
         self.recommendation.proposed = []
 

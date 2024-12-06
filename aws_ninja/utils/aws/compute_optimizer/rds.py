@@ -57,8 +57,8 @@ class RDSInstance:
 
         self.tags = {t['key']: t['value'] for t in service['tags']}
 
-        self.storage_finding = RecommendationFinding(service['storageFinding'])
-        self.storage_findings = [RecommendationFinding(f) for f in service['storageFindingReasonCodes']]
+        self.storage_finding = RecommendationFinding(service['storageFinding'].lower())
+        self.storage_findings = [RecommendationFinding(f.lower()) for f in service['storageFindingReasonCodes']]
         self.storage_current = RDSStorageConfiguration()
         self.storage_current.type = service['currentStorageConfiguration']['storageType'] if 'storageType' in service['currentStorageConfiguration'] else None
         self.storage_current.allocated = service['currentStorageConfiguration']['allocatedStorage'] if 'allocatedStorage' in service['currentStorageConfiguration'] else None
@@ -66,8 +66,8 @@ class RDSInstance:
         self.storage_current.max_allocated = service['currentStorageConfiguration']['maxAllocatedStorage'] if 'maxAllocatedStorage' in service['currentStorageConfiguration'] else None
         self.storage_current.throughput = service['currentStorageConfiguration']['storageThroughput'] if 'storageThroughput' in service['currentStorageConfiguration'] else None
 
-        self.instance_finding = RecommendationFinding(service['instanceFinding'])
-        self.instance_findings = [RecommendationFinding(f) for f in service['instanceFindingReasonCodes']]
+        self.instance_finding = RecommendationFinding(service['instanceFinding'].lower())
+        self.instance_findings = [RecommendationFinding(f.lower()) for f in service['instanceFindingReasonCodes']]
         self.instance_current = RDSInstanceConfiguration()
         self.instance_current.type = service['currentDBInstanceClass']
 
