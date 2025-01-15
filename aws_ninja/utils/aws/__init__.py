@@ -45,6 +45,8 @@ def recommendation_finding_to_human(finding: RecommendationFinding):
         RecommendationFinding.EBS_THROUGHPUT_OVERPROVISIONED: 'Throughput are over-provisioned',
         RecommendationFinding.NETWORK_BANDWIDTH_OVERPROVISIONED:
             'Network Bandwidth is over-provisioned',
+        RecommendationFinding.NEW_GENERATION_DB_INSTANCE_CLASS_AVAILABLE:
+            'New Generation DB Instance Class is available',
 
         TrustedAdvisorPillar.COST_OPTIMIZING: 'Cost Optimisation',
         TrustedAdvisorPillar.PERFORMANCE: 'Performance',

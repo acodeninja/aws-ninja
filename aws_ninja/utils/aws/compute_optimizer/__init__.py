@@ -29,3 +29,4 @@ class RecommendationFinding(Enum):
     EBS_IOPS_OVERPROVISIONED = 'ebsiopsoverprovisioned'
     EBS_THROUGHPUT_OVERPROVISIONED = 'ebsthroughputoverprovisioned'
     NETWORK_BANDWIDTH_OVERPROVISIONED = 'networkbandwidthoverprovisioned'
+    NEW_GENERATION_DB_INSTANCE_CLASS_AVAILABLE = 'newgenerationdbinstanceclassavailable'
