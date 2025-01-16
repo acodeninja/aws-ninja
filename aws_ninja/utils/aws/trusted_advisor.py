@@ -53,7 +53,7 @@ class TrustedAdvisorRecommendation:
         self.description = recommendation['recommendation']['description'].replace('h4', 'strong')
         self.pillars = [TrustedAdvisorPillar(p) for p in recommendation['recommendation']['pillars']]
         self.resources = [
-            TrustedAdvisorResource(r['metadata']['2'] if '2' in r['metadata'] else r['awsResourceId']) 
-            for r in recommendation['resources'] 
-            if r['status'] in include_status and ('2' in r['metadata'] or 'awsResourceId' in r)
+            TrustedAdvisorResource(r['metadata']['2'] if '2' in r['metadata'] else r['awsResourceId'])
+            for r in recommendation['resources']
+            if r['status'] in include_status and (('2' in r['metadata'] and r['metadata']['2']) or 'awsResourceId' in r)
         ]
