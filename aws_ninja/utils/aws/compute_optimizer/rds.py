@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from aws_ninja.utils.aws.trim_arn import trim_arn
+from aws_ninja.utils.aws.trim_arn import ecs_arn_to_service_name
 from aws_ninja.utils.aws.compute_optimizer import RecommendationFinding
 from aws_ninja.utils.aws.compute_optimizer import RecommendationCategory
 
@@ -52,7 +52,7 @@ class RDSInstance:
 
     def __init__(self, service):
         self.arn = service['resourceArn']
-        self.name = trim_arn(service['resourceArn'])
+        self.name = ecs_arn_to_service_name(service['resourceArn'])
         self.engine = service['engine']
 
         self.tags = {t['key']: t['value'] for t in service['tags']}

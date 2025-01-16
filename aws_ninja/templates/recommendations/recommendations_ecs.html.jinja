@@ -60,3 +60,9 @@
 {% else %}
     <p>This ecs service seems to be {{ service.recommendation.finding | to_human | lower }}.</p>
 {% endif %}
+
+<div
+    class="ecs-data-graph"
+    data-cluster="{{ service.cluster }}"
+    data-service="{{ service.name }}"
+>{{ service.container_insights | tojson }}</div>

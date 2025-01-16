@@ -18,6 +18,10 @@
             page-break-before: always;
         }
 
+        .plot-container {
+            filter: invert(75%) hue-rotate(180deg);
+        }
+
         @page {
             margin: 0;
             padding: 5rem;
@@ -138,6 +142,52 @@
                 el.target = "_blank";
             }
         });
+    })();
+</script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script>
+    (function () {
+        const graphs = document.getElementsByClassName('ecs-data-graph');
+
+        for (const graph of graphs) {
+            const {cluster, service} = graph.dataset;
+            const data = JSON.parse(graph.innerText)
+                .map(d => {
+                    const CPUUtilisedPercent = ((d.CpuUtilized / d.CpuReserved) * 100).toFixed(3);
+                    const MemoryUtilisedPercent = ((d.MemoryUtilized / d.MemoryReserved) * 100).toFixed(3);
+
+                    return {
+                        ...d,
+                        MemoryUtilisedPercent,
+                        CPUUtilisedPercent,
+                    };
+                });
+            graph.innerText = '';
+            Plotly.newPlot(
+                graph,
+                [
+                    {
+                        type: 'scatter',
+                        mode: 'lines',
+                        name: 'MemoryUtilisedPercent',
+                        x: data.map(d => d['@timestamp']),
+                        y: data.map(d => d.MemoryUtilisedPercent),
+                    },
+                    {
+                        type: 'scatter',
+                        mode: 'lines',
+                        name: 'CPUUtilisedPercent',
+                        x: data.map(d => d['@timestamp']),
+                        y: data.map(d => d.CPUUtilisedPercent),
+                    }
+                ],
+                {
+                    title: 'Utilisation last 24 hours'
+                }
+            );
+
+            graph.getElementsByClassName("main-svg")[0].style.cssText = "background: rgba(0, 0, 0, 0);";
+        }
     })();
 </script>
 </body>

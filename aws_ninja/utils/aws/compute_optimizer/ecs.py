@@ -1,16 +1,18 @@
 import math
 from typing import List, Dict
 
-from aws_ninja.utils.aws.trim_arn import trim_arn
+from aws_ninja.utils.aws.container_insights import get_container_insights_data
+from aws_ninja.utils.aws.trim_arn import ecs_arn_to_service_name, ecs_arn_to_cluster_name
 from aws_ninja.utils.aws.compute_optimizer import RecommendationCategory
 from aws_ninja.utils.aws.compute_optimizer import RecommendationFinding
 from aws_ninja.utils.aws.compute_optimizer import RecommendationResourceType
+from poetry.console.commands import self
 
 
 def get_ecs_recommendations(session):
     response = session.client('compute-optimizer').get_ecs_service_recommendations()
 
-    services = [ECSService(s) for s in response['ecsServiceRecommendations']]
+    services = [ECSService(session, s) for s in response['ecsServiceRecommendations']]
 
     return services
 
@@ -36,17 +38,21 @@ class Recommendation:
 
 class ECSService:
     arn: str
+    name: str
+    cluster: str
     tags: Dict[str, str]
     account: str
     recommendation: Recommendation
     provisioned: ECSServiceProvisionedWith
     metrics: ECSServiceMetrics
+    container_insights: List[Dict[str, str]]
 
-    def __init__(self, service):
+    def __init__(self, session, service):
         self.arn = service['serviceArn']
-        self.name = trim_arn(service['serviceArn'])
+        self.cluster = ecs_arn_to_cluster_name(service['serviceArn'])
+        self.name = ecs_arn_to_service_name(service['serviceArn']).replace(f"{self.cluster}-", '')
         self.account = service['accountId']
-
+        self.container_insights = get_container_insights_data(session, self.cluster, f"{self.cluster}-{self.name}")
         self.tags = {t['key']: t['value'] for t in service['tags']}
 
         self.recommendation = Recommendation()

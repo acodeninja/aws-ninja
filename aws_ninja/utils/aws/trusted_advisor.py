@@ -3,7 +3,7 @@ from enum import Enum
 from pprint import pprint
 from typing import List
 
-from aws_ninja.utils.aws.trim_arn import trim_arn
+from aws_ninja.utils.aws.trim_arn import ecs_arn_to_service_name
 
 
 def get_trusted_advisor_recommendations(session, include_status=None):
@@ -30,7 +30,7 @@ class TrustedAdvisorResource:
 
     def __init__(self, arn: str):
         self.arn = arn
-        self.name = trim_arn(arn)
+        self.name = ecs_arn_to_service_name(arn)
 
 
 class TrustedAdvisorPillar(Enum):
